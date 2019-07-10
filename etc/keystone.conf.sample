@@ -23,6 +23,20 @@
 # a different host. (uri value)
 #public_endpoint = <None>
 
+# DEPRECATED: The base admin endpoint URL for Keystone that is advertised to
+# clients (NOTE: this does NOT affect how Keystone listens for connections).
+# Defaults to the base host URL of the request. For example, if keystone
+# receives a request to `http://server:35357/v3/users`, then this will option
+# will be automatically treated as `http://server:35357`. You should only need
+# to set option if either the value of the base URL contains a path that
+# keystone does not automatically infer (`/prefix/v3`), or if the endpoint
+# should be found on a different host. (uri value)
+# This option is deprecated for removal since R.
+# Its value may be silently ignored in the future.
+# Reason: With the removal of the 2.0 API keystone does not distinguish between
+# admin and public endpoints.
+#admin_endpoint = <None>
+
 # Maximum depth of the project hierarchy, excluding the project acting as a
 # domain at the top of the hierarchy. WARNING: Setting it to a large value may
 # adversely impact performance. (integer value)
@@ -270,6 +284,37 @@
 # The default exchange under which topics are scoped. May be overridden by an
 # exchange name specified in the transport_url option. (string value)
 #control_exchange = keystone
+
+
+[access_rules_config]
+
+#
+# From keystone
+#
+
+# Entry point for the access rules config backend driver in the
+# `keystone.access_rules_config` namespace.  Keystone only provides a `json`
+# driver, so there is no reason to change this unless you are providing a
+# custom entry point. (string value)
+#driver = json
+
+# Toggle for access rules caching. This has no effect unless global caching is
+# enabled. (boolean value)
+#caching = true
+
+# Time to cache access rule data in seconds. This has no effect unless global
+# caching is enabled. (integer value)
+#cache_time = <None>
+
+# Path to access rules configuration. If not present, no access rule
+# configuration will be loaded and application credential access rules will be
+# unavailable. (string value)
+#rules_file = /etc/keystone/access_rules.json
+
+# Toggles permissive mode for access rules. When enabled, application
+# credentials can be created with any access rules regardless of operator's
+# configuration. (boolean value)
+#permissive = false
 
 
 [application_credential]
@@ -540,14 +585,6 @@
 # Fernet tokens. (string value)
 #key_repository = /etc/keystone/credential-keys/
 
-# Toggle for caching only on retrieval of user credentials. This has no effect
-# unless global caching is enabled. (boolean value)
-#caching = true
-
-# Time to cache credential data in seconds. This has no effect unless global
-# caching is enabled. (integer value)
-#cache_time = <None>
-
 
 [database]
 
@@ -592,6 +629,16 @@
 # Deprecated group/name - [DATABASE]/sql_idle_timeout
 # Deprecated group/name - [sql]/idle_timeout
 #connection_recycle_time = 3600
+
+# DEPRECATED: Minimum number of SQL connections to keep open in a pool.
+# (integer value)
+# Deprecated group/name - [DEFAULT]/sql_min_pool_size
+# Deprecated group/name - [DATABASE]/sql_min_pool_size
+# This option is deprecated for removal.
+# Its value may be silently ignored in the future.
+# Reason: The option to set the minimum pool size is not supported by
+# sqlalchemy.
+#min_pool_size = 1
 
 # Maximum number of SQL connections to keep open in a pool. Setting a value of
 # 0 indicates no limit. (integer value)
@@ -1069,7 +1116,7 @@
 # also be readable by keystone's server process. It must contain at least one
 # public key that corresponds to a private key in `keystone.conf [jwt_tokens]
 # jws_private_key_repository`. This option is only applicable in deployments
-# issuing JWS tokens and setting `keystone.conf [token] provider = jws`.
+# issuing JWS tokens and setting `keystone.conf [tokens] provider = jws`.
 # (string value)
 #jws_public_key_repository = /etc/keystone/jws-keys/public
 
@@ -1082,7 +1129,7 @@
 # In the future, keystone may support the ability to sign tokens with multiple
 # private keys. For now, only a key named `private.pem` within this directory
 # is required to issue JWS tokens. This option is only applicable in
-# deployments issuing JWS tokens and setting `keystone.conf [token] provider =
+# deployments issuing JWS tokens and setting `keystone.conf [tokens] provider =
 # jws`. (string value)
 #jws_private_key_repository = /etc/keystone/jws-keys/private
 
@@ -2510,6 +2557,17 @@
 # in every request for a scoped token to avoid re-scoping altogether. (boolean
 # value)
 #allow_rescope_scoped_token = true
+
+# DEPRECATED: This controls whether roles should be included with tokens that
+# are not directly assigned to the token's scope, but are instead linked
+# implicitly to other role assignments. (boolean value)
+# This option is deprecated for removal since R.
+# Its value may be silently ignored in the future.
+# Reason: Default roles depend on a chain of implied role assignments. Ex: an
+# admin user will also have the reader and member role. By ensuring that all
+# these roles will always appear on the token validation response, we can
+# improve the simplicity and readability of policy files.
+#infer_roles = true
 
 # DEPRECATED: Enable storing issued token data to token validation cache so
 # that first token validation doesn't actually cause full validation cycle.
