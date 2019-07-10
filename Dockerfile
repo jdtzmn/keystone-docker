@@ -1,8 +1,10 @@
+# Modifications copyright (C) 2019 Jacob Daitzman
+
 FROM python:2.7.12
-MAINTAINER = Di Xu <stephenhsu90@gmail.com>
+LABEL maintainer="Jacob Daitzman <jdtzmn@gmail.com>"
 
 EXPOSE 5000 35357
-ENV KEYSTONE_VERSION 9.1.0
+ENV KEYSTONE_VERSION 15.0.0
 ENV KEYSTONE_ADMIN_PASSWORD passw0rd
 ENV KEYSTONE_DB_ROOT_PASSWD passw0rd
 ENV KEYSTONE_DB_PASSWD passw0rd
