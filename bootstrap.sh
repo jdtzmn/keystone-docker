@@ -71,14 +71,12 @@ keystone-manage fernet_setup --keystone-user keystone --keystone-group keystone
 keystone-manage credential_setup --keystone-user keystone --keystone-group keystone
 
 # Bootstrap keystone
-keystone-manage bootstrap --bootstrap-username admin \
+keystone-manage bootstrap \
 		--bootstrap-password $KEYSTONE_ADMIN_PASSWORD \
-		--bootstrap-project-name admin \
-		--bootstrap-role-name admin \
-		--bootstrap-service-name keystone \
 		--bootstrap-admin-url "$HTTP://$HOSTNAME:35357/v3" \
 		--bootstrap-public-url "$HTTP://$HOSTNAME:5000/v3" \
-		--bootstrap-internal-url "$HTTP://$HOSTNAME:5000/v3"
+		--bootstrap-internal-url "$HTTP://$HOSTNAME:5000/v3" \
+        --bootstrap-region-id RegionOne
 
 # Write openrc to disk
 cat > /root/openrc <<EOF
